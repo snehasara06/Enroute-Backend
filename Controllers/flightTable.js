@@ -17,6 +17,29 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/:from/:to', async (req, res) => {
+
+    try {
+        console.log("From"+req.params.from);
+        console.log("To"+req.params.to);
+        const flights = await FlightTable.find({"From":req.params.from,"To":req.params.to})
+        console.log("length"+flights.length)
+        if(flights.length==0)
+        {
+            console.log("onnum illa")
+            res.send({msg:'Not available'});
+        }
+        else{
+        res.send(flights);
+        console.log("get method")
+        console.log(flights);
+        }
+    }
+    catch (err) {
+        console.log('Error in retriving FlightTable:' + JSON.stringify(err, undefined, 2));
+    }
+})
+
 router.post('/', async (req, res) => {
     try {
         const flights = new FlightTable(req.body)
