@@ -24,7 +24,7 @@ app.use('/dropDown', dropDown);
 var api = require('../Travel-Backend/Routes/api');
 app.use('/api', api)
 
-var flightDetails=require('../Travel-Backend/Controllers/flightDetails')
+var flightDetails=require('./Controllers/flightDetails.js')
 app.use('/flightDetails',flightDetails);
 
 app.get('/', (req, res) => {
