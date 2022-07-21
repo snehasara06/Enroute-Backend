@@ -11,10 +11,6 @@ app.use(cors({
     origin: 'http://localhost:4200'
 }));
 
-
-var flightController = require('./Controllers/flightController.js');
-app.use('/flightData', flightController);
-
 var flightTable = require('./Controllers/flightTable.js');
 app.use('/flightTable', flightTable);
 

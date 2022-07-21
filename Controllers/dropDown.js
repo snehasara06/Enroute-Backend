@@ -9,11 +9,9 @@ router.get('/', async (req, res) => {
     try {
         const dropList = await dropDown.find()
         res.send(dropList);
-        console.log("get method")
-        console.log(dropList);
     }
     catch (err) {
-        console.log('Error in retriving dropDown:' + JSON.stringify(err, undefined, 2));
+        res.status(400).json({ err })
     }
 })
 
@@ -24,7 +22,7 @@ router.post('/', async (req, res) => {
         res.send(dropList)
     }
     catch (err) {
-        console.log('Error in Posting dropDown:' + JSON.stringify(err, undefined, 2));
+        res.status(400).json({ err })
     }
 })
 

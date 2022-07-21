@@ -20,53 +20,38 @@ function verifyToken(req, res, next) {
     next()
 }
 
-router.get('/', (req, res) => {
-    res.send('From API route');
-})
+
 
 router.post('/register', (req, res) => {
     let userData = req.body
     let user = new login(userData);
     user.save((error, registeredUser) => {
         if (error) {
-            console.log(error)
+            res.status(400).json({ error })
         }
         else {
-
             let payload = { subject: registeredUser._id }
             let token = jwt.sign(payload, 'secretKey')
             res.status(200).send({ token })
-
-            // res.status(200).send(registeredUser);
         }
     })
 
 })
-router.post('/login',(req, res) => {
-    let userData = req.body
-    login.findOne({ mailId: userData.mailId }, (error, user) => {
-        if (error) {
-            console.log(error)
+router.post('/login', (req, res) => {
+    login.find({ mailId: req.body.mailId }, { mailId: 1, password: 1, _id: 1 }, (err, doc) => {
+        if (doc[0] == undefined) {
+            res.status(401).json({ message: 'Invalid user...Please register' })
         }
-        else {
-            if (!user) {
-                res.status(401).send('Invalid mailId')
-            }
-            else {
-                if (user.password !== userData.password) {
-                    res.status(401).send('Invalid password');
-                } else {
-                    let payload = { subject: user._id }
-                    let token = jwt.sign(payload, 'secretKey')
-                    res.status(200).send({ token })
+        else if (doc[0].mailId == req.body.mailId && doc[0].password == req.body.password) {
+            let payload = { subject: doc._id };
+            let token = jwt.sign(payload, 'secretKey');
+            res.status(200).send({ token });
+        }
+        else if (doc[0].mailId != req.body.mailId || doc[0].password != req.body.password) {
+            res.status(401).json({ message: 'Username or password is invalid' })
 
-                    // res.status(200).send('Successfully logged in :)')
-                }
-            }
         }
     })
 })
-router.get('/flights', verifyToken, (req, res) => {
 
-})
 module.exports = router;
