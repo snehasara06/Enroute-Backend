@@ -2,8 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('./db.js');
-const jwt = require('jsonwebtoken');
-
+const verifyToken=require('../Travel-Backend/Routes/api')
 const app = express();
 app.use(bodyParser.json());
 
@@ -12,26 +11,21 @@ app.use(cors({
 }));
 
 var flightTable = require('./Controllers/flightTable.js');
-app.use('/flightTable', flightTable);
+app.use('/flightTable', verifyToken,flightTable);
 
 var dropDown = require('./Controllers/dropDown.js')
-app.use('/dropDown', dropDown);
+app.use('/dropDown',verifyToken, dropDown);
 
 var api = require('../Travel-Backend/Routes/api');
-app.use('/api', api)
+app.use('/api',verifyToken, api)
 
 var flightDetails=require('./Controllers/flightDetails.js')
-app.use('/flightDetails',flightDetails);
+app.use('/flightDetails', verifyToken,flightDetails);
 
-app.get('/', (req, res) => {
-    res.send("Hai sneha!");
-})
+
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log("Server running on localhost:" + PORT)
 })
-// app.listen(8080,()=>{
-//     console.log('Server running at port: 8080')
-// });
 
 

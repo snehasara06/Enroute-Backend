@@ -3,8 +3,6 @@ const router = express.Router();
 const flightDetail=require('../Models/flightDetail')
 router.post('/', (req, res) => {
  
-        console.log("flight summary")
-        console.log(req.body.firstname);
         var detail=new flightDetail({
            firstname: req.body.firstname,
             lastname: req.body.lastname,
